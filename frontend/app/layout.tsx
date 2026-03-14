@@ -15,24 +15,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div
-          style={{
-            width: "100%",
-            height: "100vh",
-            display: "flex",
-            overflow: "hidden",
-          }}
-        >
+        <div style={{ width: "100%", height: "100vh", display: "flex", overflow: "hidden" }}>
           <Sidebar />
-          <main
-            style={{
-              flex: 1,
-              minWidth: 0,
-              background: "var(--page-bg)",
-              overflowY: "auto",
-              position: "relative",
-            }}
-          >
+          <main style={{ flex: 1, minWidth: 0, background: "var(--page-bg)", overflowY: "auto", position: "relative" }}>
             {children}
           </main>
         </div>

@@ -46,13 +46,13 @@ export default function DashboardPage() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: "40px 32px" }}>
+    <div className="page-pad" style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: "40px 32px" }}>
 
       {/* Heading */}
-      <h1 style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.03em", lineHeight: 1.1, textAlign: "center", marginBottom: "10px" }}>
+      <h1 className="hero-title" style={{ fontSize: "42px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.03em", lineHeight: 1.1, textAlign: "center", marginBottom: "10px" }}>
         Extract anything.
       </h1>
-      <p style={{ fontSize: "18px", fontWeight: 400, color: "var(--text-secondary)", letterSpacing: "-0.02em", textAlign: "center", marginBottom: "32px" }}>
+      <p className="hero-sub" style={{ fontSize: "18px", fontWeight: 400, color: "var(--text-secondary)", letterSpacing: "-0.02em", textAlign: "center", marginBottom: "32px" }}>
         Scrape or crawl any URL and get structured data instantly.
       </p>
 

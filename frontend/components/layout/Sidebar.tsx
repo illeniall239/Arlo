@@ -150,6 +150,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([]);
+  const [open, setOpen] = useState(false);
 
   function loadRecent() {
     fetch(`${API_BASE}/jobs/?page_size=5`)
@@ -161,27 +162,54 @@ export default function Sidebar() {
       .catch(() => {});
   }
 
-  useEffect(() => {
-    loadRecent();
-  }, [pathname]);
+  useEffect(() => { loadRecent(); }, [pathname]);
 
   useEffect(() => {
     window.addEventListener("arlo:new-run", loadRecent);
     return () => window.removeEventListener("arlo:new-run", loadRecent);
   }, []);
 
+  // Close drawer on route change
+  useEffect(() => { setOpen(false); }, [pathname]);
+
   return (
-    <aside
-      style={{
-        width: "240px",
-        flexShrink: 0,
-        background: "var(--sidebar-bg)",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        color: "var(--sidebar-text)",
-      }}
-    >
+    <>
+      {/* Mobile top bar — CSS hides on desktop */}
+      <div className="mob-header">
+        <button className="mob-toggle" onClick={() => setOpen(true)} aria-label="Open menu">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+        <div className="mob-header-logo">
+          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="2" width="5" height="5" rx="1" fill="#111" />
+              <rect x="9" y="2" width="5" height="5" rx="1" fill="#111" />
+              <rect x="2" y="9" width="5" height="5" rx="1" fill="#111" />
+              <rect x="9" y="9" width="5" height="5" rx="1" fill="#c9f135" />
+            </svg>
+          </div>
+          <span style={{ fontSize: "15px", fontWeight: 600, color: "#fff", letterSpacing: "-0.01em" }}>Arlo</span>
+        </div>
+      </div>
+
+      {/* Backdrop — only when drawer is open */}
+      {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
+
+      {/* sidebar-drawer class has no effect on desktop (only activates in mobile media query) */}
+      <aside
+        className={`sidebar-drawer${open ? " open" : ""}`}
+        style={{
+          width: "240px",
+          flexShrink: 0,
+          background: "var(--sidebar-bg)",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          color: "var(--sidebar-text)",
+        }}
+      >
       {/* ── logo row ── */}
       <div
         style={{
@@ -219,7 +247,7 @@ export default function Sidebar() {
       <div style={{ padding: "4px 8px 10px" }}>
         {/* New research */}
         <div
-          onClick={() => router.push(`/dashboard?new=${Date.now()}`)}
+          onClick={() => { router.push(`/dashboard?new=${Date.now()}`); setOpen(false); }}
           style={{ textDecoration: "none", display: "block", cursor: "pointer" }}
         >
           <div
@@ -258,12 +286,12 @@ export default function Sidebar() {
         </div>
 
         {/* All jobs */}
-        <Link href="/jobs" style={{ textDecoration: "none", display: "block" }}>
+        <Link href="/jobs" style={{ textDecoration: "none", display: "block" }} onClick={() => setOpen(false)}>
           <SidebarItem icon={<IconSearch />} label="All jobs" active={pathname === "/jobs"} />
         </Link>
 
         {/* Schedules */}
-        <Link href="/schedules" style={{ textDecoration: "none", display: "block" }}>
+        <Link href="/schedules" style={{ textDecoration: "none", display: "block" }} onClick={() => setOpen(false)}>
           <SidebarItem icon={<IconCalendar />} label="Schedules" active={pathname === "/schedules"} />
         </Link>
       </div>
@@ -301,7 +329,7 @@ export default function Sidebar() {
             };
             const dotColor = statusDot[job.status] ?? "rgba(255,255,255,0.2)";
             return (
-              <Link key={job.id} href={`/jobs/${job.id}`} style={{ textDecoration: "none", display: "block" }}>
+              <Link key={job.id} href={`/jobs/${job.id}`} style={{ textDecoration: "none", display: "block" }} onClick={() => setOpen(false)}>
                 <div
                   style={{
                     display: "flex",
@@ -336,5 +364,6 @@ export default function Sidebar() {
 
 
     </aside>
+    </>
   );
 }

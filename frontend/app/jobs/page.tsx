@@ -56,7 +56,7 @@ export default function JobsPage() {
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
-    <div style={{ padding: "28px 32px" }}>
+    <div className="page-pad" style={{ padding: "28px 32px" }}>
       <div style={{ marginBottom: "24px" }}>
         <h1 style={{ fontSize: "20px", fontWeight: 650, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: "4px" }}>
           All jobs
@@ -66,8 +66,9 @@ export default function JobsPage() {
         </p>
       </div>
 
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
       <div style={{ border: "1px solid var(--border)", borderRadius: "10px", overflow: "hidden", background: "var(--surface)" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "540px" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid var(--border)", background: "var(--page-bg)" }}>
               {["URL", "Goal", "Status", "Date", ""].map((h) => (
@@ -134,6 +135,7 @@ export default function JobsPage() {
             })}
           </tbody>
         </table>
+      </div>
       </div>
 
       {totalPages > 1 && (

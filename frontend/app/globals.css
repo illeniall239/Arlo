@@ -78,3 +78,120 @@ body {
   0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
   40% { transform: translateY(-4px); opacity: 1; }
 }
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Responsive layout ─────────────────────────────────────────────────── */
+
+.layout-root {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.layout-main {
+  flex: 1;
+  min-width: 0;
+  background: var(--page-bg);
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Mobile top bar — hidden on desktop */
+.mob-header {
+  display: none;
+}
+
+/* Sidebar backdrop — hidden on desktop */
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 651px) {
+  /* Sidebar becomes a fixed drawer */
+  .sidebar-drawer {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.22s ease;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  }
+  .sidebar-drawer.open {
+    transform: translateX(0);
+    animation: slideIn 0.22s ease;
+  }
+
+  /* Backdrop */
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 49;
+  }
+
+  /* Mobile top bar */
+  .mob-header {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    align-items: center;
+    background: var(--sidebar-bg);
+    border-bottom: 1px solid var(--sidebar-border);
+    z-index: 48;
+    padding: 0 12px;
+  }
+  .mob-header-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+  }
+  .mob-toggle {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.7);
+    flex-shrink: 0;
+  }
+
+  /* Tighter page padding on mobile — clear the 48px top bar */
+  .page-pad {
+    padding: 16px !important;
+    padding-top: 64px !important;
+  }
+
+  /* Stack job detail header */
+  .job-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  /* Smaller hero text on dashboard */
+  .hero-title {
+    font-size: 28px !important;
+  }
+  .hero-sub {
+    font-size: 15px !important;
+  }
+}

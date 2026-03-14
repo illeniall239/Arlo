@@ -113,10 +113,10 @@ export default function JobDetailPage({ params }: { params: Promise<{ id: string
       </div>
 
       {/* ── Main content ── */}
-      <div style={{ padding: "20px 28px 40px", flex: 1 }}>
+      <div className="page-pad" style={{ padding: "20px 28px 40px", flex: 1 }}>
 
         {/* ── Header ── */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "24px", marginBottom: "20px" }}>
+        <div className="job-header-row" style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "24px", marginBottom: "20px" }}>
           <div style={{ minWidth: 0 }}>
             {/* URL */}
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
