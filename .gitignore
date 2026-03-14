@@ -1,5 +1,10 @@
-# Claude
+# Claude / internal docs
 .claude/
+context.md
+changes.md
+system_design.txt
+CareerAI_SRS.txt
+backend/pytest_output.txt
 
 # Environment / secrets
 .env
