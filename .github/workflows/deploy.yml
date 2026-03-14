@@ -22,8 +22,8 @@ jobs:
 
       - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: projects/753925254002/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          service_account: github-actions@project-9c28a193-bda1-4e91-a03.iam.gserviceaccount.com
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
       - uses: google-github-actions/setup-gcloud@v2
 
@@ -52,8 +52,8 @@ jobs:
 
       - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: projects/753925254002/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          service_account: github-actions@project-9c28a193-bda1-4e91-a03.iam.gserviceaccount.com
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
       - uses: google-github-actions/setup-gcloud@v2
 
