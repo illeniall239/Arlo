@@ -1,0 +1,77 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PROJECT_ID: project-9c28a193-bda1-4e91-a03
+  REGION: us-central1
+  REGISTRY: us-central1-docker.pkg.dev/project-9c28a193-bda1-4e91-a03/arlo
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/753925254002/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@project-9c28a193-bda1-4e91-a03.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and push backend
+        run: |
+          docker build -t ${{ env.REGISTRY }}/backend:${{ github.sha }} backend/
+          docker push ${{ env.REGISTRY }}/backend:${{ github.sha }}
+
+      - name: Deploy backend to Cloud Run
+        run: |
+          gcloud run deploy arlo-backend \
+            --image ${{ env.REGISTRY }}/backend:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --quiet
+
+  deploy-frontend:
+    name: Deploy Frontend
+    runs-on: ubuntu-latest
+    needs: deploy-backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/753925254002/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-actions@project-9c28a193-bda1-4e91-a03.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and push frontend
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL=https://arlo-backend-753925254002.us-central1.run.app \
+            -t ${{ env.REGISTRY }}/frontend:${{ github.sha }} \
+            frontend/
+          docker push ${{ env.REGISTRY }}/frontend:${{ github.sha }}
+
+      - name: Deploy frontend to Cloud Run
+        run: |
+          gcloud run deploy arlo-frontend \
+            --image ${{ env.REGISTRY }}/frontend:${{ github.sha }} \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }} \
+            --quiet
